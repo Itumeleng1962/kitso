@@ -44,8 +44,8 @@ A modern, responsive website for Kitso-Botlhale Development Services built with 
 
 The website includes all the contact information you provided:
 - **Emails**: info@kbds.co.za, kefilwe@kbds.co.za, sales@kbds.co.za
-- **Phone**: 081 505 4479, 084 755 9448
-- **Address**: 8344 Mokoena Street, Ext 2, Dobsonville, 1863, Soweto
+- **Phone**: 081 505 4479, 0824246334 (Sales and Marketing Manager: Ntokozo)
+- **Address**: 26/2 Pule and street Ellias Motsoaledi road, Dobsonville, Soweto
 
 ## 🛠 Customization
 
@@ -128,7 +128,7 @@ The website is fully responsive and includes:
 
 For any questions or modifications needed, contact:
 - Email: info@kbds.co.za
-- Phone: 081 505 4479
+- Phone: 081 505 4479, 0824246334 (Sales and Marketing Manager: Ntokozo)
 
 ## 🚀 Deployment
 
