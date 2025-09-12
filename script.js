@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initServicesDropdown();
     initProductTabs();
     initContactForm();
+    initProvinceToggle();
     initScrollAnimations();
     initSmoothScrolling();
     initFAQ();
@@ -208,6 +209,23 @@ function initContactForm() {
             submitBtn.disabled = false;
         }, 2000);
     });
+}
+
+// Show/hide province field based on interest selection
+function initProvinceToggle() {
+    const interest = document.getElementById('interest');
+    const provinceGroup = document.getElementById('provinceGroup');
+    if (!interest || !provinceGroup) return;
+
+    const updateVisibility = () => {
+        const value = interest.value;
+        const shouldShow = value === 'inyama-basket';
+        provinceGroup.style.display = shouldShow ? 'block' : 'none';
+    };
+
+    interest.addEventListener('change', updateVisibility);
+    // Initialize on load
+    updateVisibility();
 }
 
 // Form Validation
