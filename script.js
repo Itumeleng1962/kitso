@@ -22,9 +22,14 @@ function initNavigation() {
         navMenu.classList.toggle('active');
     });
 
-    // Close mobile menu when clicking on a link
+    // Close mobile menu when clicking on a link (except services dropdown toggle)
     document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function(e) {
+            if (this.classList.contains('services-dropdown')) {
+                // Keep menu open for dropdown toggle
+                e.preventDefault();
+                return;
+            }
             mobileMenu.classList.remove('active');
             navMenu.classList.remove('active');
         });
