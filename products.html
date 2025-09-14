@@ -44,6 +44,12 @@
                     <a href="contact.html" class="nav-link nav-btn">Contact</a>
                 </li>
             </ul>
+            <div class="nav-cart">
+                <button class="cart-icon" onclick="openCart()" id="cartButton">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
             <div class="nav-toggle" id="mobile-menu">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -421,6 +427,17 @@
                             <div class="product-features">
                                 <span class="feature-tag">Traditional</span>
                             </div>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('mogodu', -1)">-</button>
+                                    <input type="number" id="qty-mogodu" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('mogodu', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('mogodu', 'Mogodu (Tripe)', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -431,6 +448,17 @@
                         <div class="product-info">
                             <h3>Chicken Feet</h3>
                             <p class="product-description">Cleaned, ready for spicing and braai.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('chickenfeet', -1)">-</button>
+                                    <input type="number" id="qty-chickenfeet" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('chickenfeet', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('chickenfeet', 'Chicken Feet', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -441,6 +469,17 @@
                         <div class="product-info">
                             <h3>Cow Leg</h3>
                             <p class="product-description">Cut to size for stews.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('cowleg', -1)">-</button>
+                                    <input type="number" id="qty-cowleg" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('cowleg', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('cowleg', 'Cow Leg', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -451,6 +490,17 @@
                         <div class="product-info">
                             <h3>Chicken</h3>
                             <p class="product-description">Mixed portions or specific cuts on request.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('chicken', -1)">-</button>
+                                    <input type="number" id="qty-chicken" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('chicken', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('chicken', 'Chicken', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -461,6 +511,17 @@
                         <div class="product-info">
                             <h3>Mince</h3>
                             <p class="product-description">Beef mince in various fat ratios.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('mince', -1)">-</button>
+                                    <input type="number" id="qty-mince" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('mince', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('mince', 'Mince', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -471,6 +532,17 @@
                         <div class="product-info">
                             <h3>Beef</h3>
                             <p class="product-description">Steak, stewing beef, and roasting cuts.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('beef', -1)">-</button>
+                                    <input type="number" id="qty-beef" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('beef', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('beef', 'Beef', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -481,6 +553,17 @@
                         <div class="product-info">
                             <h3>Liver</h3>
                             <p class="product-description">Beef or chicken liver, fresh and cleaned.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('liver', -1)">-</button>
+                                    <input type="number" id="qty-liver" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('liver', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('liver', 'Liver', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -491,6 +574,17 @@
                         <div class="product-info">
                             <h3>Boerwors</h3>
                             <p class="product-description">Traditional boerewors perfect for braai.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('boerwors', -1)">-</button>
+                                    <input type="number" id="qty-boerwors" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('boerwors', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('boerwors', 'Boerwors', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -501,6 +595,17 @@
                         <div class="product-info">
                             <h3>Pork</h3>
                             <p class="product-description">Chops, ribs, and stewing cuts available.</p>
+                            <div class="product-actions">
+                                <div class="quantity-selector">
+                                    <button class="qty-btn minus" onclick="changeQuantity('pork', -1)">-</button>
+                                    <input type="number" id="qty-pork" value="1" min="1" max="50" class="qty-input">
+                                    <button class="qty-btn plus" onclick="changeQuantity('pork', 1)">+</button>
+                                </div>
+                                <button class="btn btn-primary add-to-cart" onclick="addToCart('pork', 'Pork', 'kg')">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -902,6 +1007,52 @@
             </div>
         </div>
     </section>
+
+    <!-- Shopping Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <div class="cart-header">
+                <h2><i class="fas fa-shopping-cart"></i> Your Meat Order</h2>
+                <button class="close-cart" onclick="closeCart()">&times;</button>
+            </div>
+            <div class="cart-body">
+                <div id="cartItems" class="cart-items">
+                    <!-- Cart items will be populated here -->
+                </div>
+                <div class="cart-summary">
+                    <div class="cart-total">
+                        <strong><span id="cartTotal">Quote on request</span></strong>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <button class="btn btn-secondary" onclick="closeCart()">Continue Shopping</button>
+                <button class="btn btn-primary" onclick="proceedToOrder()">
+                    <i class="fas fa-check"></i>
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div id="orderModal" class="order-modal">
+        <div class="order-modal-content">
+            <div class="order-header">
+                <h2><i class="fas fa-check-circle"></i> Order Confirmation</h2>
+            </div>
+            <div class="order-body">
+                <p>Thank you for your order! Your meat order has been submitted successfully.</p>
+                <div id="orderSummary" class="order-summary">
+                    <!-- Order summary will be populated here -->
+                </div>
+                <p class="order-note">We will contact you shortly to confirm your order and arrange delivery.</p>
+            </div>
+            <div class="order-footer">
+                <button class="btn btn-primary" onclick="closeOrderModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">

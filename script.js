@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     initSmoothScrolling();
     initFAQ();
+    initMeatOrdering();
 });
 
 // Navigation Functionality
@@ -580,3 +581,224 @@ const debouncedScrollHandler = debounce(function() {
 }, 10);
 
 window.addEventListener('scroll', debouncedScrollHandler);
+
+// Meat Ordering Functionality
+let cart = [];
+let cartTotal = 0;
+
+function initMeatOrdering() {
+    // Initialize cart from localStorage if available
+    const savedCart = localStorage.getItem('meatCart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCartDisplay();
+    }
+}
+
+function changeQuantity(productId, change) {
+    const qtyInput = document.getElementById(`qty-${productId}`);
+    let currentQty = parseInt(qtyInput.value) || 1;
+    let newQty = currentQty + change;
+    
+    // Ensure quantity is within bounds
+    newQty = Math.max(1, Math.min(50, newQty));
+    qtyInput.value = newQty;
+}
+
+function addToCart(productId, productName, unit) {
+    const qtyInput = document.getElementById(`qty-${productId}`);
+    const quantity = parseInt(qtyInput.value) || 1;
+    
+    // Check if item already exists in cart
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+        // Update quantity
+        existingItem.quantity += quantity;
+    } else {
+        // Add new item
+        cart.push({
+            id: productId,
+            name: productName,
+            unit: unit,
+            quantity: quantity
+        });
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('meatCart', JSON.stringify(cart));
+    
+    // Update cart display
+    updateCartDisplay();
+    
+    // Show success message
+    showCartMessage(`${productName} added to cart!`);
+    
+    // Reset quantity to 1
+    qtyInput.value = 1;
+}
+
+function updateCartDisplay() {
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotalElement = document.getElementById('cartTotal');
+    
+    // Update cart count
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    
+    // Hide cart total since we don't have prices
+    cartTotalElement.textContent = 'Quote on request';
+    
+    // Update cart items display
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+    } else {
+        cartItems.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p class="cart-item-unit">${item.unit}</p>
+                </div>
+                <div class="cart-item-controls">
+                    <button class="qty-btn minus" onclick="updateCartQuantity('${item.id}', -1)">-</button>
+                    <span class="cart-item-qty">${item.quantity}</span>
+                    <button class="qty-btn plus" onclick="updateCartQuantity('${item.id}', 1)">+</button>
+                    <button class="remove-item" onclick="removeFromCart('${item.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+function updateCartQuantity(productId, change) {
+    const item = cart.find(item => item.id === productId);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            removeFromCart(productId);
+        } else {
+            localStorage.setItem('meatCart', JSON.stringify(cart));
+            updateCartDisplay();
+        }
+    }
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    localStorage.setItem('meatCart', JSON.stringify(cart));
+    updateCartDisplay();
+}
+
+function openCart() {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.style.display = 'block';
+    updateCartDisplay();
+}
+
+function closeCart() {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.style.display = 'none';
+}
+
+function proceedToOrder() {
+    if (cart.length === 0) {
+        showCartMessage('Your cart is empty!', 'error');
+        return;
+    }
+    
+    // Close cart modal
+    closeCart();
+    
+    // Show order confirmation modal
+    const orderModal = document.getElementById('orderModal');
+    const orderSummary = document.getElementById('orderSummary');
+    
+    // Build order summary
+    orderSummary.innerHTML = cart.map(item => `
+        <div class="order-item">
+            <span class="order-item-name">${item.name}</span>
+            <span class="order-item-qty">${item.quantity} ${item.unit}</span>
+        </div>
+    `).join('') + `
+        <div class="order-note">
+            <strong>We will contact you with pricing and delivery details.</strong>
+        </div>
+    `;
+    
+    orderModal.style.display = 'block';
+    
+    // Clear cart
+    cart = [];
+    localStorage.removeItem('meatCart');
+    updateCartDisplay();
+}
+
+function closeOrderModal() {
+    const orderModal = document.getElementById('orderModal');
+    orderModal.style.display = 'none';
+}
+
+function showCartMessage(message, type = 'success') {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `cart-message ${type}`;
+    messageDiv.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+        ${message}
+    `;
+    
+    // Add styles if not already added
+    if (!document.querySelector('.cart-message-styles')) {
+        const styles = document.createElement('style');
+        styles.className = 'cart-message-styles';
+        styles.textContent = `
+            .cart-message {
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            }
+            .cart-message.success {
+                background: linear-gradient(135deg, #4caf50, #45a049);
+            }
+            .cart-message.error {
+                background: linear-gradient(135deg, #f44336, #da190b);
+            }
+            .cart-message i {
+                margin-right: 0.5rem;
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+    
+    document.body.appendChild(messageDiv);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.parentNode.removeChild(messageDiv);
+        }
+    }, 3000);
+}
+
+// Close modals when clicking outside
+window.addEventListener('click', function(event) {
+    const cartModal = document.getElementById('cartModal');
+    const orderModal = document.getElementById('orderModal');
+    
+    if (event.target === cartModal) {
+        closeCart();
+    }
+    if (event.target === orderModal) {
+        closeOrderModal();
+    }
+});
