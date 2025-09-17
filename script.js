@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initSmoothScrolling();
     initFAQ();
     initMeatOrdering();
+    initImageLightbox();
 });
 
 // Navigation Functionality
@@ -177,6 +178,7 @@ function initProductTabs() {
 // Contact Form Functionality
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return; // Safeguard: only bind on pages that have the form
 
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -581,6 +583,110 @@ const debouncedScrollHandler = debounce(function() {
 }, 10);
 
 window.addEventListener('scroll', debouncedScrollHandler);
+
+// Image Lightbox (click to enlarge any image)
+function initImageLightbox() {
+    // Create lightbox elements once
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Image preview');
+
+    const img = document.createElement('img');
+    img.className = 'lightbox-image';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Close image preview');
+    closeBtn.innerHTML = '&times;';
+
+    overlay.appendChild(img);
+    overlay.appendChild(closeBtn);
+    document.body.appendChild(overlay);
+
+    const openLightbox = (src, altText) => {
+        img.src = src;
+        img.alt = altText || '';
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeLightbox = () => {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+        // Clear src after animation for memory
+        setTimeout(() => { img.removeAttribute('src'); }, 200);
+    };
+
+    // Close actions
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay || e.target === closeBtn) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) closeLightbox();
+    });
+
+    // Attach click handlers to all images except those explicitly opted out
+    const applyHandlers = () => {
+        document.querySelectorAll('img:not(.no-lightbox)').forEach(image => {
+            if (image.dataset.lightboxApplied) return;
+            image.dataset.lightboxApplied = 'true';
+            image.style.cursor = 'zoom-in';
+            image.addEventListener('click', () => {
+                // Ignore clicks on images that act as UI controls (e.g., icons smaller than 40px)
+                const rect = image.getBoundingClientRect();
+                if (rect.width < 40 || rect.height < 40) return;
+                openLightbox(image.src, image.alt || '');
+            });
+        });
+    };
+
+    // Initial apply and observe DOM changes (for content loaded later)
+    applyHandlers();
+    const observer = new MutationObserver(applyHandlers);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Delegated clicks on common image containers (handles overlays covering the <img>)
+    document.addEventListener('click', (e) => {
+        // Don't trigger when clicking explicit UI controls (buttons). Allow anchors if they wrap an image
+        const controlSelector = '.quick-view-btn, .add-to-cart, .qty-btn, .remove-item, .wishlist-btn, button';
+        if (e.target.closest(controlSelector)) return;
+
+        // If user clicked on an image, use it directly
+        let targetImg = e.target.closest('img:not(.no-lightbox)');
+
+        // Otherwise, if clicked within a known image container, find its image
+        if (!targetImg) {
+            const container = e.target.closest('.product-image, .team-avatar, .leader-image, .story-image, .hero-image, .bulk-image, .page-header-background, .footer-logo');
+            if (container) targetImg = container.querySelector('img:not(.no-lightbox)');
+        }
+
+        if (targetImg) {
+            // If image is wrapped in a link, prevent navigation and open lightbox
+            const link = targetImg.closest('a');
+            if (link) e.preventDefault();
+            const rect = targetImg.getBoundingClientRect();
+            if (rect.width >= 40 && rect.height >= 40) {
+                openLightbox(targetImg.src, targetImg.alt || '');
+            }
+        }
+    }, true);
+
+    // Inject minimal styles if not present
+    if (!document.querySelector('#lightbox-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'lightbox-styles';
+        styles.textContent = `
+            .lightbox-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease; z-index: 10000; padding: 2rem; }
+            .lightbox-overlay.open { opacity: 1; visibility: visible; }
+            .lightbox-image { max-width: 90vw; max-height: 85vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); cursor: zoom-out; }
+            .lightbox-close { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border: none; border-radius: 50%; background: rgba(255,255,255,0.15); color: #fff; font-size: 28px; line-height: 40px; cursor: pointer; display: grid; place-items: center; }
+            .lightbox-close:hover { background: rgba(255,255,255,0.25); }
+        `;
+        document.head.appendChild(styles);
+    }
+}
 
 // Meat Ordering Functionality
 let cart = [];
